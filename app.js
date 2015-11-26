@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var mongoose   = require('mongoose');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -24,6 +24,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+
+// mongodb connect
+mongoose.connect('mongodb://rwingkki:aogus4114/@ds053764.mongolab.com:53764/rwing');
+mongoose.connection.on('error', console.log);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
