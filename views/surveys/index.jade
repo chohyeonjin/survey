@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+  .container
+    h1.page-header List
+    
+  
+    table.table.table-bordered
+      thead
+        tr
+          th 이메일
+          th 제목
+          th 날짜
+          th 조회수
+          th
+      //- tbody
+      //-   each survey in surveys
+      //-     tr
+      //-       td= survey.email
+      //-       td
+      //-         a(href='/surveys/#{survey.id}')= survey.title
+      //-       td= moment(survey.createdAt).format('YYYY-MM-DD HH:mm:ss')
+      //-       td= survey.read
+            //- td
+            //-   a.btn.btn-xs.btn-default(href='/surveys/#{survey.id}/edit') 수정
+            //-   | 
+            //-   a.btn.btn-xs.btn-default(data-id=survey.id, class='delete') 삭제
