@@ -2,13 +2,13 @@ extends ../layout
 
 block content
   .container
-    h1.page-header= post.title
+    h1.page-header= survey.title
     p
       b by #{survey.email}
       | 
       span at #{moment(survey.createdAt).format('YYYY-MM-DD HH:mm:ss')} 
       | 
       | (조회수 #{survey.read})
-    p.well(style='white-space:pre;')= post.content
+    p.well(style='white-space:pre;')= survey.content
     
     a.btn.btn-default(href='/surveys') 목록

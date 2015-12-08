@@ -1,5 +1,6 @@
 var express = require('express'),
     User = require('../models/User');
+    Survey = require('../models/Survey');
 var router = express.Router();
 
 /* GET home page. */
@@ -9,10 +10,6 @@ router.get('/', function(req, res, next) {
 
 router.get('/signin', function(req, res, next) {
   res.render('signin');
-});
-
-router.get('/survey', function(req,res,next){
-  res.render('surveys/index');
 });
 
 router.post('/signin', function(req, res, next) {
@@ -39,6 +36,6 @@ router.get('/signout', function(req, res, next) {
   req.flash('success', '로그아웃 되었습니다.');
   res.redirect('/');
 });
-//router.use('/todos', todos);
+
 
 module.exports = router;
