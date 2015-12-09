@@ -1,0 +1,32 @@
+extends ../../layout
+
+block content
+  .container
+    h1.page-header 설문
+    
+  
+    table.table.table-bordered
+      thead
+        tr
+
+          th 제목
+
+          th
+      tbody
+        each question in questions
+          tr
+
+            td
+              a(href='/surveys/#{survey.id}')= question.title
+              
+
+            td= question.read
+            td
+              a.btn.btn-xs.btn-default(href='/surveys/#{question.id}/edit') 수정
+              | 
+              a.btn.btn-xs.btn-default(href='/surveys/#{question._id}?_method=DELETE') 삭제
+    
+    //- a.btn.btn-primary(href='/surveys/#{survey.id}/new') 질문추가
+    | 
+    a.btn.btn-default(href='/surveys') 목록          
+    
