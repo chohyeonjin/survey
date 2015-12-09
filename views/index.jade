@@ -8,6 +8,7 @@ block content
       p 갸아아아악
   
       h3 주요 기능
+      
       ul
         li 
           a(href='/users') Users
@@ -19,9 +20,11 @@ block content
             a(href='/signin') Signin
           li
             a(href='/users/new') Signup
+
         else
           li
             a(href='/users/#{currentUser._id}') Profile
           li
             a(href='/signout') Signout
+            
             
