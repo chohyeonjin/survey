@@ -38,8 +38,23 @@ router.get('/new', function(req, res, next) {
   res.render('surveys/edit',{survey: 0});
 });
 
+//설문 안의 질문 페이지 추가 띄우기
 router.get('/:id/questions/new', function(req, res, next) {
-  res.render('surveys/questions/edit',{question: 0});
+  Question.find({},function(err, questions) {
+    if (err) {
+      return next(err);
+    }
+    Survey.findById(req.params.id, function(err, survey) {
+      if (err) {
+        return next(err);
+      }
+      if(survey) {
+        survey.read = survey.read + 1;
+        survey.save(function(err) { });
+      }
+    res.render('surveys/questions/edit', {questions : 0 , survey : survey});
+  });
+});
 });
 
 
@@ -56,7 +71,7 @@ router.get('/:id', function(req, res, next) {
         survey.read = survey.read + 1;
         survey.save(function(err) { });
       }
-    res.render('surveys/questions/index', {questions : questions});
+    res.render('surveys/questions/index', {questions : questions , survey : survey});
   });
 });
 });
@@ -106,13 +121,23 @@ router.put('/:id', function(req, res, next) {
   });
 });
 
-//게시글을 삭제할 때
+//설문을 삭제할 때
 router.delete('/:id', function(req, res, next) {
   Survey.findOneAndRemove({_id: req.params.id}, function(err) {
     if (err) {
       return next(err);
     }
     res.redirect('/surveys');
+  });
+});
+
+//질문을 삭제할 때
+router.delete('/:id/:quesid', function(req, res, next) {
+  Question.findOneAndRemove({_id: req.params.quesid}, function(err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/surveys/'+ req.params.id);
   });
 });
 
@@ -156,6 +181,28 @@ router.post('/', function(req, res, next) {
     });
   });
 
+  router.post('/:id/questions', function(req, res, next) {
+    //var err = validateForm(req.body, {needPassword: true});
+
+    //if(err){
+      //return res.redirect('back');
+    //}
+
+  //에러 없을 시 새로운 게시글 생성
+    var newQuestion = new Question({
+        title : req.body.title,
+        content : req.body.content
+      }); //필요한 내용을 입력
+
+      newQuestion.save(function(err, doc){
+        if(err){
+          return next(err);
+        }
+
+        res.redirect('/surveys/' + req.params.id);
+
+      });
+    });
 
 
 module.exports = router;
