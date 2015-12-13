@@ -17,16 +17,16 @@ block content
           tr
 
             td
-              a(href='/surveys/#{question.id}')= question.title
-              
-
+              a(href='/surveys/#{survey.id}/#{question.id}/answer')= question.title
             td= question.content
-            td
-              a.btn.btn-xs.btn-default(href='/surveys/#{survey.id}/#{question.id}/edit') 수정
-              | 
-              a.btn.btn-xs.btn-default(href='/surveys/#{survey.id}/#{question._id}/?_method=DELETE') 삭제
+            if login.type == 'super'  
+              td
+                a.btn.btn-xs.btn-default(href='/surveys/#{survey.id}/#{question.id}/edit') 수정
+                | 
+                a.btn.btn-xs.btn-default(href='/surveys/#{survey.id}/#{question._id}/?_method=DELETE') 삭제
     
-    a.btn.btn-primary(href='/surveys/#{survey.id}/questions/new') 질문추가
+    if login.type == 'super'  
+      a.btn.btn-primary(href='/surveys/#{survey.id}/questions/new') 질문추가
     | 
     a.btn.btn-default(href='/surveys') 목록          
     

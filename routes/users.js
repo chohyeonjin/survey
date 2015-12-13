@@ -41,14 +41,15 @@ function validateForm(form, options) {
 }
 
 /* GET users listing. */
-router.get('/',function(req, res, next) {
+router.get('/',needAuth,function(req, res, next) {
   User.find({}, function(err, users) {
     if (err) {
       return next(err);
     }
-    res.render('users/index', {users: users});
+    res.render('users/index', {login: req.session.user , users: users});
   });
 });
+
 
 router.get('/new', function(req, res, next) {
   res.render('users/new');
@@ -136,6 +137,7 @@ router.post('/', function(req, res, next) {
     var newUser = new User({
       name: req.body.name,
       email: req.body.email,
+      type : 'person'
     });
     newUser.password = req.body.password;
 

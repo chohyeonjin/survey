@@ -2,10 +2,12 @@ extends ../../layout
 
 block content
   .container
-  h3 질문목록
-    h1.page-header= question.title
+    h1.page-header= questions.title
     p
 
-    p.well(style='white-space:pre;')= question.content
-    
+      | 
+      span at questions.content 
+  
+    p.well(style='white-space:pre;')= questions.content
+
     a.btn.btn-default(href='/surveys') 목록

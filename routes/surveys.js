@@ -1,8 +1,17 @@
 var express = require('express'),
     Survey = require('../models/Survey');
     Question = require('../models/Question');
+    Answer = require('../models/Answer');
 var router = express.Router();
 
+function needAuth(req, res, next) {
+    if (req.session.user) {
+      next();
+    } else {
+      req.flash('danger', '로그인이 필요합니다.');
+      res.redirect('/signin');
+    }
+}
 // 원하는 정보가 모두 들어왔나를 확인하는 함수
 function validateForm(form, options) {
   var email = form.email || "";
@@ -23,20 +32,20 @@ function validateForm(form, options) {
   return null;
 }
 
-
-router.get('/',function(req, res, next) {
+//설문 리스트 띄우기
+router.get('/',needAuth,function(req, res, next) {
   Survey.find({}, function(err, surveys) {
     if (err) {
       return next(err);
     }
-    res.render('surveys/index', {surveys: surveys});
+    res.render('surveys/index', {login: req.session.user , surveys: surveys});
   });
 });
 
 
 //새 설문 띄우기
 router.get('/new', function(req, res, next) {
-  res.render('surveys/edit',{survey: 0});
+  res.render('surveys/edit',{survey: 0, login : req.session.user });
 });
 
 //설문 안의 질문 페이지 추가 띄우기
@@ -63,10 +72,7 @@ router.get('/:id/questions/new', function(req, res, next) {
 
 //해당 설문으로 들어갈 때
 router.get('/:id', function(req, res, next) {
-  Question.find({},function(err, questions) {
-    if (err) {
-      return next(err);
-    }
+
     Survey.findById(req.params.id, function(err, survey) {
       if (err) {
         return next(err);
@@ -75,10 +81,37 @@ router.get('/:id', function(req, res, next) {
         survey.read = survey.read + 1;
         survey.save(function(err) { });
       }
-    res.render('surveys/questions/index', {questions : questions , survey : survey});
+      Question.find({sId:req.params.id},function(err,questions){
+        if(err){
+          return next(err);
+        }
+        res.render('surveys/questions/index', {questions : questions , survey : survey , login : req.session.user});
+      });
+    });
   });
-});
-});
+
+//질문 내용 보기
+
+  router.get('/:id/:qid/answer', function(req, res, next) {
+
+      Survey.findById(req.params.id, function(err, survey) {
+        if (err) {
+          return next(err);
+        }
+        Question.findById(req.params.qid,function(err,question){
+          if(err){
+            return next(err);
+          }
+          if (req.session.user.type == 'super'){
+            res.render('surveys/questions/show', {question : question , survey : survey , login : req.session.user});
+          }
+          else {
+            res.render('surveys/answers/edit' , {question : question , survey : survey , login : req.session.user });
+          }
+        });
+      });
+    });
+
 
 //설문 수정을 눌렀을 때
 router.get('/:id/edit', function(req, res, next) {
@@ -149,25 +182,19 @@ router.delete('/:id/:quesid', function(req, res, next) {
 //글 쓰기 수행
 
 router.post('/', function(req, res, next) {
-  var err = validateForm(req.body, {needPassword: true});
-
-  if(err){
-    return res.redirect('back');
-  }
 
 //에러 없을 시 새로운 게시글 생성
   var newSurvey = new Survey({
       email: req.body.email,
       title : req.body.title,
       content : req.body.content,
-      password : req.body.password
     }); //필요한 내용을 입력
 
     newSurvey.save(function(err,doc){
       if(err){
         return next(err);
       } else {
-        res.redirect('/surveys/' + doc.id);
+        res.redirect('/surveys');
       }
     });
   });
@@ -179,6 +206,7 @@ router.post('/', function(req, res, next) {
 
   //에러 없을 시 새로운 게시글 생성
     var newQuestion = new Question({
+        sId : req.params.id,
         title : req.body.title,
         content : req.body.content
       }); //필요한 내용을 입력
@@ -193,5 +221,21 @@ router.post('/', function(req, res, next) {
       });
     });
 
+  //설문 안의 응답 쓰기
+  router.post('/:id/:qid/answer',function(req,res,next){
+    var newAnswer = new Answer({
+      qId : req.params.id,
+      ansBy : req.session.user.name,
+      ansRes : req.body.content,
+    });
+
+    newAnswer.save(function(err,doc){
+      if(err){
+        return next(err);
+      }
+
+      res.redirect('/surveys');
+    });
+  });
 
 module.exports = router;

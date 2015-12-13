@@ -8,6 +8,7 @@ var schema = new Schema({
   content: {type: String, required: true, trim: true},
   createdAt: {type: Date, default: Date.now},
   read: {type: Number, default: 0}
+  
 }, {
   toJSON: { virtuals: true},
   toObject: {virtuals: true}

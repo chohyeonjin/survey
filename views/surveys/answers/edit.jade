@@ -1,0 +1,23 @@
+extends ../../layout
+
+block content
+  .container
+
+    h1.page-header 질문 응답
+
+    form(action = "/surveys/#{survey.id}/#{question.id}/answer", method='POST')
+    
+      .form-group
+        label(for='title') 질문 제목
+        input.form-control(type='text', id='title', name='title', placeholder='title',value = question.title)
+      .form-group
+        label(for='title') 질문 내용
+        input.form-control(type='text', id='title', name='title', placeholder='title',value = question.content)        
+      .form-group
+        label(for='content') 응답
+        textarea.form-control(id='content', rows='10', name='content', placeholder='content here')
+
+      div.form-actions
+        a.btn.btn-default(href='javascript:window.history.back();') 뒤로 
+        | 
+        button.btn.btn-primary(type='submit') 추가완료

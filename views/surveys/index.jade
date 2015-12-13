@@ -23,12 +23,14 @@ block content
             td= survey.content    
             td= moment(survey.createdAt).format('YYYY-MM-DD HH:mm:ss')
             td= survey.read
-            td
-              a.btn.btn-xs.btn-default(href='/surveys/#{survey.id}/edit') 수정
-              | 
-              a.btn.btn-xs.btn-default(href='/surveys/#{survey._id}?_method=DELETE') 삭제
-
-    a.btn.btn-primary(href='/surveys/new') 글쓰기
+            if login.type == 'super'   
+              td
+                a.btn.btn-xs.btn-default(href='/surveys/#{survey.id}/edit') 수정
+                | 
+                a.btn.btn-xs.btn-default(href='/surveys/#{survey._id}?_method=DELETE') 삭제
+              
+    if login.type == 'super'   
+      a.btn.btn-primary(href='/surveys/new') 글쓰기
     | 
     a.btn.btn-default(href='/') 처음화면          
     

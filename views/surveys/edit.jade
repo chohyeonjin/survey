@@ -10,9 +10,11 @@ block content
     form(action = (survey.id) ? "/surveys/#{survey.id}?_method=PUT" : "/surveys", method='POST')
       .form-group
         label(for='email') Email address
-        input.form-control(type='email', id='email', name='email', placeholder='Email', value=survey.email)
-        label(for='password') Password
-        input.form-control(type='password', id='password', name='password', placeholder='Password')
+        if survey.email
+          input.form-control(type='email', id='email', name='email', placeholder='Email', value=survey.email)
+        else
+          input.form-control(type='email', id='email', name='email', placeholder='Email', value=login.email)
+
       .form-group
         label(for='title') Title
         input.form-control(type='text', id='title', name='title', placeholder='title', value=survey.title)
