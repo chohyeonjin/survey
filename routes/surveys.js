@@ -49,7 +49,10 @@ router.get('/:id/questions/new', function(req, res, next) {
       if (err) {
         return next(err);
       }
+
       if(survey) { //조회수 증가
+
+
         survey.read = survey.read + 1;
         survey.save(function(err) { });
       }
@@ -142,7 +145,9 @@ router.delete('/:id/:quesid', function(req, res, next) {
   });
 });
 
-//설문 쓰기 수행
+
+//글 쓰기 수행
+
 router.post('/', function(req, res, next) {
   var err = validateForm(req.body, {needPassword: true});
 
@@ -167,13 +172,10 @@ router.post('/', function(req, res, next) {
     });
   });
 
+
 //설문 안의 질문 쓰기
   router.post('/:id/questions', function(req, res, next) {
-    var err = validateForm(req.body, {needPassword: true});
 
-    if(err){
-      return res.redirect('back');
-    }
 
   //에러 없을 시 새로운 게시글 생성
     var newQuestion = new Question({
