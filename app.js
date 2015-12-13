@@ -47,6 +47,7 @@ app.use(session({
   saveUninitialized: true,
   secret: 'long-long-long-secret-string-1313513tefgwdsvbjkvasd'
 }));
+
 app.use(flash());
 
 
@@ -59,6 +60,7 @@ app.use(function(req, res, next) {
 app.use('/', routes);
 app.use('/users', users);
 app.use('/surveys', surveys);
+
 
 
 // catch 404 and forward to error handler

@@ -10,7 +10,7 @@ block content
         tr
 
           th 제목
-
+          th 질문 사항
           th
       tbody
         each question in questions
@@ -22,7 +22,7 @@ block content
 
             td= question.content
             td
-              a.btn.btn-xs.btn-default(href='/surveys/#{question.id}/edit') 수정
+              a.btn.btn-xs.btn-default(href='/surveys/#{survey.id}/#{question.id}/edit') 수정
               | 
               a.btn.btn-xs.btn-default(href='/surveys/#{survey.id}/#{question._id}/?_method=DELETE') 삭제
     

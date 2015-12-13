@@ -34,6 +34,7 @@ router.get('/',function(req, res, next) {
 });
 
 
+//새 설문 띄우기
 router.get('/new', function(req, res, next) {
   res.render('surveys/edit',{survey: 0});
 });
@@ -48,7 +49,7 @@ router.get('/:id/questions/new', function(req, res, next) {
       if (err) {
         return next(err);
       }
-      if(survey) {
+      if(survey) { //조회수 증가
         survey.read = survey.read + 1;
         survey.save(function(err) { });
       }
@@ -57,7 +58,7 @@ router.get('/:id/questions/new', function(req, res, next) {
 });
 });
 
-
+//해당 설문으로 들어갈 때
 router.get('/:id', function(req, res, next) {
   Question.find({},function(err, questions) {
     if (err) {
@@ -76,7 +77,7 @@ router.get('/:id', function(req, res, next) {
 });
 });
 
-//글 수정을 눌렀을 때
+//설문 수정을 눌렀을 때
 router.get('/:id/edit', function(req, res, next) {
   Survey.findById(req.params.id, function(err, survey) {
     if (err) {
@@ -86,19 +87,19 @@ router.get('/:id/edit', function(req, res, next) {
   });
 });
 
-// 글 수정할때
+// 설문 수정할때
 router.put('/:id', function(req, res, next) {
   var err = validateForm(req.body);
 
   if (err) {
     return res.redirect('back');
   }
-//게시글 id 에 대한 수행
+//설문 id 에 대한 수행
   Survey.findById({_id: req.params.id}, function(err, surveys) {
     if (err) {
       return next(err);
     }
-    // 게시글이 없을 경우 go back
+    // 설문이 없을 경우 go back
     if (!surveys) {
       return res.redirect('back');
     }
@@ -141,22 +142,7 @@ router.delete('/:id/:quesid', function(req, res, next) {
   });
 });
 
-// id에 해당하는 게시글을 보여주는 함수
-// router.get('/:id', function(req, res, next) {
-//   Survey.findById(req.params.id, function(err, survey) {
-//     if (err) {
-//       return next(err);
-//     }
-//     if (survey) {
-//       survey.read = survey.read + 1;
-//       survey.save(function(err) { });
-//       res.render('surveys/questions/index', {survey: survey});
-//     }
-//     return next(new Error('not found'));
-//   });
-// });
-
-//글 쓰기 수행
+//설문 쓰기 수행
 router.post('/', function(req, res, next) {
   var err = validateForm(req.body, {needPassword: true});
 
@@ -181,12 +167,13 @@ router.post('/', function(req, res, next) {
     });
   });
 
+//설문 안의 질문 쓰기
   router.post('/:id/questions', function(req, res, next) {
-    //var err = validateForm(req.body, {needPassword: true});
+    var err = validateForm(req.body, {needPassword: true});
 
-    //if(err){
-      //return res.redirect('back');
-    //}
+    if(err){
+      return res.redirect('back');
+    }
 
   //에러 없을 시 새로운 게시글 생성
     var newQuestion = new Question({

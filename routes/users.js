@@ -6,7 +6,7 @@ function needAuth(req, res, next) {
     if (req.session.user) {
       next();
     } else {
-    //  req.flash('danger', '로그인이 필요합니다.');
+      req.flash('danger', '로그인이 필요합니다.');
       res.redirect('/signin');
     }
 }
@@ -143,7 +143,7 @@ router.post('/', function(req, res, next) {
       if (err) {
         return next(err);
       } else {
-//      req.flash('success', '가입이 완료되었습니다. 로그인 해주세요.');
+        req.flash('success', '가입이 완료되었습니다. 로그인 해주세요.');
         res.redirect('/');
       }
     });

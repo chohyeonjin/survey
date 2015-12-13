@@ -10,6 +10,7 @@ block content
         tr
           th 이메일
           th 제목
+          th 도움말
           th 날짜
           th 조회수
           th
@@ -19,6 +20,7 @@ block content
             td= survey.email
             td
               a(href='/surveys/#{survey.id}')= survey.title
+            td= survey.content    
             td= moment(survey.createdAt).format('YYYY-MM-DD HH:mm:ss')
             td= survey.read
             td
