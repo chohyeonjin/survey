@@ -2,10 +2,10 @@ extends ../../layout
 
 block content
   .container
-
+    if survey.id
     h1.page-header 질문 추가
-    
-    form(action='/users', method='POST')
+
+    form(action = "/surveys/#{survey.id}/questions", method='POST')
     
       .form-group
         label(for='title') Title
@@ -17,4 +17,4 @@ block content
       div.form-actions
         a.btn.btn-default(href='javascript:window.history.back();') 뒤로 
         | 
-        button.btn.btn-primary(type='submit') 질문추가
+        button.btn.btn-primary(type='submit') 추가완료
