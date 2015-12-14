@@ -7,11 +7,11 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index');
 });
-
+//로그인 화면으로 갈 때
 router.get('/signin', function(req, res, next) {
   res.render('signin');
 });
-
+//로그인 할 때
 router.post('/signin', function(req, res, next) {
   User.findOne({email: req.body.email}, function(err, user) {
     if (err) {
@@ -29,7 +29,7 @@ router.post('/signin', function(req, res, next) {
     }
   });
 });
-
+//로그아웃
 router.get('/signout', function(req, res, next) {
   delete req.session.user;
   req.flash('success', '로그아웃 되었습니다.');

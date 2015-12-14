@@ -110,7 +110,7 @@ router.delete('/:id', function(req, res, next) {
     res.redirect('/users');
   });
 });
-
+//해당 사용자의 정보를 보여줄 때
 router.get('/:id', function(req, res, next) {
   User.findById(req.params.id, function(err, user) {
     if (err) {
@@ -119,7 +119,7 @@ router.get('/:id', function(req, res, next) {
     res.render('users/show', {user: user});
   });
 });
-
+//회원 가입할 때
 router.post('/', function(req, res, next) {
   var err = validateForm(req.body, {needPassword: true});
   if (err) {
