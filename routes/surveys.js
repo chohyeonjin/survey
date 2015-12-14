@@ -120,11 +120,16 @@ router.get('/:id', function(req, res, next) {
       if (err){
         return next(err);
       }
-      Answer.find({qId : req.params.qid},function(err,answers){
-        if(err){
+      Question.findById(req.params.qid, function(err,question){
+        if(err) {
           return next(err);
         }
-        res.render('surveys/answers/show',  {survey : survey , login : req.session.user , answers:answers });
+        Answer.find({qId : req.params.qid},function(err,answers){
+          if(err){
+            return next(err);
+          }
+          res.render('surveys/answers/show',  { question : question , survey : survey , login : req.session.user , answers:answers });
+        });
       });
     });
   });
