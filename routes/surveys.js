@@ -90,6 +90,8 @@ router.get('/:id', function(req, res, next) {
     });
   });
 
+
+
 //질문 내용 보기
 
   router.get('/:id/:qid/answer', function(req, res, next) {
@@ -112,6 +114,20 @@ router.get('/:id', function(req, res, next) {
       });
     });
 
+//관리자 입장에서 응답 결과를 본다
+  router.get('/:id/:qid/result', function(req,res,next){
+    Survey.findById(req.params.id, function(err,survey){
+      if (err){
+        return next(err);
+      }
+      Answer.find({qId : req.params.qid},function(err,answers){
+        if(err){
+          return next(err);
+        }
+        res.render('surveys/answers/show',  {survey : survey , login : req.session.user , answers:answers });
+      });
+    });
+  });
 
 //설문 수정을 눌렀을 때
 router.get('/:id/edit', function(req, res, next) {
@@ -123,27 +139,29 @@ router.get('/:id/edit', function(req, res, next) {
   });
 });
 
+//설문안의 질문을 수정한다
+router.get('/:id/:qid/alter',function(req,res,next){
+
+  Survey.findById(req.params.id, function(err,survey){
+    if(err) {
+      return next(err);
+    }
+    Question.findById(req.params.qid,function(err,question){
+      if(err){
+        return next(err);
+      }
+      res.render('surveys/questions/alter', {question : question, survey : survey});
+    });
+  });
+});
+
 // 설문 수정할때
 router.put('/:id', function(req, res, next) {
-  var err = validateForm(req.body);
 
-  if (err) {
-    return res.redirect('back');
-  }
-//설문 id 에 대한 수행
   Survey.findById({_id: req.params.id}, function(err, surveys) {
     if (err) {
       return next(err);
     }
-    // 설문이 없을 경우 go back
-    if (!surveys) {
-      return res.redirect('back');
-    }
-    //글 수정 시 비밀번호 일치 여부를 확인
-    if (surveys.password !== req.body.password) {
-      return res.redirect('back');
-    }
-
     surveys.title = req.body.title;
     surveys.email = req.body.email;
     surveys.content = req.body.content;
@@ -158,6 +176,28 @@ router.put('/:id', function(req, res, next) {
   });
 });
 
+//설문 안의 질문 수정
+router.post('/:id/:qid/alter', function(req, res, next) {
+  Question.findById({_id: req.params.qid}, function(err, question) {
+    if (err) {
+      return next(err);
+    }
+    else {
+      question.sId = req.params.id;
+      question.title = req.body.title;
+      question.content = req.body.content;
+    }
+//변경 내용 저장
+    question.save(function(err) {
+      if (err) {
+        return next(err);
+      }
+      res.redirect('/surveys/'+ req.params.id);
+    });
+  });
+});
+
+
 //설문을 삭제할 때
 router.delete('/:id', function(req, res, next) {
   Survey.findOneAndRemove({_id: req.params.id}, function(err) {
@@ -169,8 +209,8 @@ router.delete('/:id', function(req, res, next) {
 });
 
 //질문을 삭제할 때
-router.delete('/:id/:quesid', function(req, res, next) {
-  Question.findOneAndRemove({_id: req.params.quesid}, function(err) {
+router.delete('/:id/:qid', function(req, res, next) {
+  Question.findOneAndRemove({_id: req.params.qid}, function(err) {
     if (err) {
       return next(err);
     }
@@ -223,10 +263,11 @@ router.post('/', function(req, res, next) {
 
   //설문 안의 응답 쓰기
   router.post('/:id/:qid/answer',function(req,res,next){
+
     var newAnswer = new Answer({
-      qId : req.params.id,
+      qId : req.params.qid,
       ansBy : req.session.user.name,
-      ansRes : req.body.content,
+      ansRes : req.body.ansres,
     });
 
     newAnswer.save(function(err,doc){
@@ -234,7 +275,7 @@ router.post('/', function(req, res, next) {
         return next(err);
       }
 
-      res.redirect('/surveys');
+      res.redirect('/surveys/'+ req.params.id);
     });
   });
 

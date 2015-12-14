@@ -3,9 +3,9 @@ extends ../../layout
 block content
   .container
 
-    h1.page-header 질문 추가
-    
-    form(action = "/surveys/#{survey.id}/questions", method='POST')
+    h1.page-header 질문 수정
+
+    form(action = "/surveys/#{survey.id}/#{question.id}/alter", method='POST')
     
       .form-group
         label(for='title') 질문 내용
@@ -17,4 +17,4 @@ block content
       div.form-actions
         a.btn.btn-default(href='javascript:window.history.back();') 뒤로 
         | 
-        button.btn.btn-primary(type='submit') 완료
+        button.btn.btn-primary(type='submit') 수정완료

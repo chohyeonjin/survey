@@ -15,13 +15,15 @@ block content
       tbody
         each question in questions
           tr
-
             td
-              a(href='/surveys/#{survey.id}/#{question.id}/answer')= question.title
+              if login.type =='super'
+                a(href='/surveys/#{survey.id}/#{question.id}/result')= question.title
+              else
+                a(href='/surveys/#{survey.id}/#{question.id}/answer')= question.title
             td= question.content
             if login.type == 'super'  
               td
-                a.btn.btn-xs.btn-default(href='/surveys/#{survey.id}/#{question.id}/edit') 수정
+                a.btn.btn-xs.btn-default(href='/surveys/#{survey.id}/#{question.id}/alter') 수정
                 | 
                 a.btn.btn-xs.btn-default(href='/surveys/#{survey.id}/#{question._id}/?_method=DELETE') 삭제
     

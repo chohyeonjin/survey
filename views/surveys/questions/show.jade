@@ -2,12 +2,22 @@ extends ../../layout
 
 block content
   .container
-    h1.page-header= questions.title
-    p
-
-      | 
-      span at questions.content 
+    h1.page-header 답변 목록
+    
   
-    p.well(style='white-space:pre;')= questions.content
+    table.table.table-bordered
+      thead
+        tr
+          th 답변자
+          th 답변 내용
+          th 답변 시간
 
-    a.btn.btn-default(href='/surveys') 목록
+      tbody
+        each answer in answers
+          tr
+            td= answer.answerBy
+            td= answer.answer
+            td= answer.createdAt
+
+    a.btn.btn-primary(href='/survey/#{survey.id}') 질문 목록
+    a.btn.btn-primary(href='/') 처음으로

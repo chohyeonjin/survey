@@ -1,0 +1,25 @@
+extends ../../layout
+
+block content
+  .container
+    h1.page-header 응답 목록
+    
+  
+    table.table.table-bordered
+      thead
+        tr
+          th 응답자
+          th 답변 내용
+          th 응답 시간
+
+      tbody
+        each answer in answers
+          tr
+            td= answer.ansBy
+            td= answer.ansRes
+            td= moment(answer.createdAt).format('YYYY-MM-DD HH:mm:ss')
+
+    
+    a.btn.btn-primary(href='/surveys/#{survey.id}') 질문 목록
+    | 
+    a.btn.btn-default(href='/') 처음화면

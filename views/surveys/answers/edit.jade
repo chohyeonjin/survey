@@ -12,12 +12,12 @@ block content
         input.form-control(type='text', id='title', name='title', placeholder='title',value = question.title)
       .form-group
         label(for='title') 질문 내용
-        input.form-control(type='text', id='title', name='title', placeholder='title',value = question.content)        
+        input.form-control(type='text', id='content', name='content', placeholder='content',value = question.content)        
       .form-group
         label(for='content') 응답
-        textarea.form-control(id='content', rows='10', name='content', placeholder='content here')
+        textarea.form-control(id='ansres', rows='10', name='ansres', placeholder='answer here')
 
       div.form-actions
         a.btn.btn-default(href='javascript:window.history.back();') 뒤로 
         | 
-        button.btn.btn-primary(type='submit') 추가완료
+        button.btn.btn-primary(type='submit') 응답완료
