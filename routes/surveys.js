@@ -12,25 +12,7 @@ function needAuth(req, res, next) {
       res.redirect('/signin');
     }
 }
-// 원하는 정보가 모두 들어왔나를 확인하는 함수
-function validateForm(form, options) {
-  var email = form.email || "";
-  var title = form.title || "";
-  email = email.trim();
 
-  if(!email){
-    return '이메일을 입력해주세요.';
-  }
-  if (!form.password && options.needPassword) {
-    return '비밀번호를 입력해주세요.';
-  }
-
-  if (form.password.length < 6) {
-    return '비밀번호는 6글자 이상이어야 합니다.';
-  }
-
-  return null;
-}
 
 //설문 리스트 띄우기
 router.get('/',needAuth,function(req, res, next) {
@@ -228,7 +210,7 @@ router.delete('/:id/:qid', function(req, res, next) {
 
 router.post('/', function(req, res, next) {
 
-//에러 없을 시 새로운 게시글 생성
+
   var newSurvey = new Survey({
       email: req.body.email,
       title : req.body.title,
