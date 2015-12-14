@@ -86,12 +86,9 @@ router.get('/:id', function(req, res, next) {
           if(err){
             return next(err);
           }
-          if (req.session.user.type == 'super'){
-            res.render('surveys/questions/show', {question : question , survey : survey , login : req.session.user});
-          }
-          else {
-            res.render('surveys/answers/edit' , {question : question , survey : survey , login : req.session.user });
-          }
+
+          res.render('surveys/answers/edit' , {question : question , survey : survey , login : req.session.user });
+
         });
       });
     });
