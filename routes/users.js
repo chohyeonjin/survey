@@ -1,7 +1,7 @@
 var express = require('express'),
     User = require('../models/User');
 var router = express.Router();
-
+//권한을 관리
 function needAuth(req, res, next) {
     if (req.session.user) {
       next();
@@ -10,7 +10,7 @@ function needAuth(req, res, next) {
       res.redirect('/signin');
     }
 }
-
+//원하는 정보가 모두 들어갔는지 확인
 function validateForm(form, options) {
   var name = form.name || "";
   var email = form.email || "";
@@ -50,11 +50,11 @@ router.get('/',needAuth,function(req, res, next) {
   });
 });
 
-
+//새 유저를 추가하는 화면을 띄움
 router.get('/new', function(req, res, next) {
   res.render('users/new');
 });
-
+//해당하는 유저에 대한 수정 화면을 띄움
 router.get('/:id/edit', function(req, res, next) {
   User.findById(req.params.id, function(err, user) {
     if (err) {
@@ -63,7 +63,7 @@ router.get('/:id/edit', function(req, res, next) {
     res.render('users/edit', {user: user});
   });
 });
-
+//해당하는 사용자의 정보를 변경
 router.put('/:id', function(req, res, next) {
   var err = validateForm(req.body);
   if (err) {
@@ -100,7 +100,7 @@ router.put('/:id', function(req, res, next) {
     });
   });
 });
-
+//사용자 계정 삭제
 router.delete('/:id', function(req, res, next) {
   User.findOneAndRemove({_id: req.params.id}, function(err) {
     if (err) {
